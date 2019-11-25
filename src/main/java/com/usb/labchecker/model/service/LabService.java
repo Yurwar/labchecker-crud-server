@@ -56,6 +56,7 @@ public class LabService {
                 .map(e -> LabByIdDto.builder()
                         .id(e.getId())
                         .description(e.getLabTheme())
+                        .subjectId(e.getCourse().getSubject().getId())
 //                        .docs(e.getDocs())
                         .number(e.getLabNumber())
                 .build())
@@ -63,19 +64,28 @@ public class LabService {
     }
 
     public List<LabByStudentIdDto> getLabListByStudentId(Integer studentId) {
-        List<LabByStudentIdDto> resultList = new ArrayList<>();
-        labResultRepository.findAllByStudent(studentService.getOne(studentId))
-                .forEach(e -> resultList.add(LabByStudentIdDto.builder()
-                        .description(e.getLab().getLabTheme())
-                        .id(e.getId())
-                        .number(e.getLab().getLabNumber())
-                        .subjectId(e.getLab()
-                                .getCourse()
-                                .getSubject()
-                                .getId())
-//                            .docs(e.getDocs())
-                        .build()));
-        return resultList;
+        List<LabByIdDto> results = getAllLabsForTelegramId(studentService.getOne(studentId).getTelegramId());
+        return results.stream()
+                .map(labByIdDto -> LabByStudentIdDto.builder().id(labByIdDto.getId())
+                .description(labByIdDto.getDescription())
+                .number(labByIdDto.getNumber())
+                .subjectId(labByIdDto.getSubjectId())
+                .build())
+                .collect(Collectors.toList());
+//
+//        List<LabByStudentIdDto> resultList = new ArrayList<>();
+//        labResultRepository.findAllByStudent(studentService.getOne(studentId))
+//                .forEach(e -> resultList.add(LabByStudentIdDto.builder()
+//                        .description(e.getLab().getLabTheme())
+//                        .id(e.getId())
+//                        .number(e.getLab().getLabNumber())
+//                        .subjectId(e.getLab()
+//                                .getCourse()
+//                                .getSubject()
+//                                .getId())
+////                            .docs(e.getDocs())
+//                        .build()));
+//        return resultList;
     }
 
     public List<LabByStudentIdDto> getLabListByStudentIdAndSubjectId(Integer studentId, Integer subjectId) {
@@ -101,6 +111,11 @@ public class LabService {
 
     }
 
-
+    public Integer getMaxMarkByLabRepoName(String repoName) {
+        return labRepository
+                .findByRepoName(repoName)
+                .orElseThrow(NoSuchElementException::new)
+                .getMaxMark();
+    }
 
 }

@@ -1,9 +1,12 @@
 package com.usb.labchecker.model.dto;
 
 import lombok.Builder;
+import lombok.Data;
+
 import java.util.List;
 
 @Builder
+@Data
 public class LabByStudentIdDto {
 
     private Integer id;

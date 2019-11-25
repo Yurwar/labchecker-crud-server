@@ -38,4 +38,9 @@ public class LabController {
         return labService.getLabListByStudentIdAndSubjectId(studentId, subjectId);
     }
 
+    @GetMapping("/{repoName}/max-mark")
+    public Integer getMaxMarkByLabRepoName(@PathVariable("repoName") String repoName) {
+        return labService.getMaxMarkByLabRepoName(repoName);
+    }
+
 }

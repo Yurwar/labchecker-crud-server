@@ -10,6 +10,7 @@
 --    last_name TEXT not null,
 --    id_group INTEGER not null,
 --    github_link TEXT not null,
+--    github_id TEXT not null,
 --    telegram_id INTEGER not null,
 --    constraint pk_students primary key (id),
 --    constraint fk_group_id foreign key (id_group) references groups(id)

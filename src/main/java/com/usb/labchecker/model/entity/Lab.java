@@ -24,6 +24,12 @@ public class Lab {
     @Column(name = "number")
     private Integer labNumber;
 
+    @Column(name = "max_mark")
+    private Integer maxMark;
+
     @Column(name = "theme")
     private String labTheme;
+
+    @Column(name = "repo_name")
+    private String repoName;
 }

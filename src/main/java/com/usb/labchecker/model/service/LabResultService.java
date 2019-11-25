@@ -45,7 +45,7 @@ public class LabResultService {
                 .findAllByStudent(studentRepository.getOne(studentId))
                 .stream()
                 .map(e-> LabResultByStudentIdDto.builder()
-                            .labResultId(e.getId())
+                            .id(e.getId())
                             .labId(e.getLab().getId())
                             .result(e.getMark())
                             .subjectId(e.getLab()
@@ -71,7 +71,7 @@ public class LabResultService {
                 .distinct()
                 .filter(labResultListBySubject::contains)
                 .map(e-> LabResultByStudentIdDto.builder()
-                        .labResultId(e.getId())
+                        .id(e.getId())
                         .labId(e.getLab().getId())
                         .result(e.getMark())
                         .subjectId(subjectRepository
