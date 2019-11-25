@@ -1,7 +1,10 @@
 package com.usb.labchecker.model.service;
 
 import com.usb.labchecker.model.dto.SubjectByStudentIdDto;
+import com.usb.labchecker.model.entity.Course;
+import com.usb.labchecker.model.entity.Student;
 import com.usb.labchecker.model.entity.Subject;
+import com.usb.labchecker.model.repository.CourseRepository;
 import com.usb.labchecker.model.repository.LabResultRepository;
 import com.usb.labchecker.model.repository.StudentRepository;
 import com.usb.labchecker.model.repository.SubjectRepository;
@@ -16,14 +19,16 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final StudentRepository studentRepository;
     private final LabResultRepository labResultRepository;
+    private final CourseRepository courseRepository;
 
     public SubjectService(SubjectRepository subjectRepository,
                           StudentRepository studentRepository,
-                          LabResultRepository labResultRepository) {
+                          LabResultRepository labResultRepository,
+                          CourseRepository courseRepository) {
         this.subjectRepository = subjectRepository;
         this.studentRepository = studentRepository;
         this.labResultRepository = labResultRepository;
-
+        this.courseRepository = courseRepository;
     }
 
     public Subject getOne(int id) {
@@ -37,17 +42,20 @@ public class SubjectService {
 
     public List<SubjectByStudentIdDto> getSubjectsByStudentId(Integer studentId) {
         List<SubjectByStudentIdDto> subjectList = new ArrayList<>();
-        labResultRepository
-                .findAllByStudent(studentRepository.getOne(studentId))
-                .forEach(e -> {
-                    SubjectByStudentIdDto subject = SubjectByStudentIdDto.builder()
-                            .id(e.getLab().getCourse().getSubject().getId())
-                            .teacher(e.getLab().getCourse().getTeacher().getFirstName() +
-                                    e.getLab().getCourse().getTeacher().getLastName())
-                            .name(e.getLab().getCourse().getSubject().getName())
-                            .build();
-                    subjectList.add(subject);
-                });
+        Student student = studentRepository.getOne(studentId);
+        List<Course> courses = courseRepository.getAllByGroup(student.getGroup());
+
+        courses.forEach(course -> {
+            Subject subject = course.getSubject();
+            SubjectByStudentIdDto subjectByStudentIdDto = SubjectByStudentIdDto.builder()
+                    .id(subject.getId())
+                    .name(subject.getName())
+                    .teacher(course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName())
+                    .build();
+
+            subjectList.add(subjectByStudentIdDto);
+        });
+
         return subjectList;
 
     }

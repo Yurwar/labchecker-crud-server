@@ -3,17 +3,22 @@ package com.usb.labchecker.model.service;
 import com.usb.labchecker.model.dto.GithubUserDto;
 import com.usb.labchecker.model.dto.StudentByTelegramIdDto;
 import com.usb.labchecker.model.dto.StudentDto;
+import com.usb.labchecker.model.entity.Lab;
 import com.usb.labchecker.model.entity.Student;
 import com.usb.labchecker.model.entity.Variant;
+import com.usb.labchecker.model.repository.LabRepository;
 import com.usb.labchecker.model.repository.LabResultRepository;
 import com.usb.labchecker.model.repository.StudentRepository;
+import com.usb.labchecker.model.repository.VariantRepository;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -22,16 +27,22 @@ public class StudentService {
     private RestTemplate restTemplate;
     private final StudentRepository studentRepository;
     private final LabResultRepository labResultRepository;
+    private final LabRepository labRepository;
+    private final VariantRepository variantRepository;
     private final GroupService groupService;
 
     public StudentService(RestTemplateBuilder restTemplate,
                           StudentRepository studentRepository,
                           GroupService groupService,
-                          LabResultRepository labResultRepository) {
+                          LabResultRepository labResultRepository,
+                          LabRepository labRepository,
+                          VariantRepository variantRepository) {
         this.restTemplate = restTemplate.build();
         this.studentRepository = studentRepository;
         this.groupService = groupService;
         this.labResultRepository = labResultRepository;
+        this.labRepository = labRepository;
+        this.variantRepository = variantRepository;
     }
 
     public Student getOne(int id) {
@@ -43,6 +54,7 @@ public class StudentService {
                 .firstName(studentDto.getFirstName())
                 .lastName(studentDto.getLastName())
                 .githubLink(studentDto.getGithubLink())
+                .githubId(studentDto.getGithubId())
                 .group(groupService.getByName(studentDto.getGroupName()))
                 .telegramId(studentDto.getTelegramId())
                 .build();
@@ -66,20 +78,11 @@ public class StudentService {
                 .build();
     }
 
-    public Integer getStudentVariantByGithubId(Integer githubId) {
-        try {
-            ResponseEntity<GithubUserDto> answer = restTemplate
-                    .getForEntity(GITHUB_API_URL_PREFIX +
-                            githubId, GithubUserDto.class);
-            Student studentToFind = studentRepository.findByGithubLink(Objects.requireNonNull(answer.getBody()).getLogin());
-            return labResultRepository.findAllByStudent(studentToFind)
-                    .iterator()
-                    .next()
-                    .getVariant()
-                    .getNumber();
-        } catch (Exception e) {
+    public Integer getStudentVariantByGithubIdAndLabRepoName(String githubId, String labRepoName) {
+        Optional<Student> student = studentRepository.findByGithubId(githubId);
+        Optional<Lab> lab = labRepository.findByRepoName(labRepoName);
+        List<Variant> variants = variantRepository.findAllByLab(lab.orElseThrow(NoSuchElementException::new));
 
-        }
-        return -1;
+        return student.orElseThrow(NoSuchElementException::new).getId() % variants.size();
     }
 }

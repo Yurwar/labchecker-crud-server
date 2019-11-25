@@ -9,4 +9,5 @@ public class StudentDto {
     private Integer telegramId;
     private String groupName;
     private String githubLink;
+    private String githubId;
 }

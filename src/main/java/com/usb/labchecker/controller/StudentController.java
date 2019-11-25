@@ -21,6 +21,7 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<Object> createStudent(@RequestBody StudentDto studentDto) {
+        System.out.println(studentDto);
         Student newStudent = studentService.createStudent(studentDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -35,8 +36,8 @@ public class StudentController {
     }
 
     @GetMapping("/{githubId}/variant")
-    public Integer getStudentVariantByGithubId(@PathVariable("githubId") Integer githubId){
-        return studentService.getStudentVariantByGithubId(githubId);
+    public Integer getStudentVariantByGithubId(@PathVariable("githubId") String githubId, @RequestParam("labRepoName") String labRepoName){
+        return studentService.getStudentVariantByGithubIdAndLabRepoName(githubId, labRepoName);
     }
 
 

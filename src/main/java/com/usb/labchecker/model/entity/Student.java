@@ -35,6 +35,9 @@ public class Student {
     @Column(name = "github_link")
     private String githubLink;
 
+    @Column(name = "github_id")
+    private String githubId;
+
     @Column(name = "telegram_id")
     private Integer telegramId;
 
