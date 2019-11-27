@@ -1,6 +1,5 @@
 package com.usb.labchecker.model.service;
 
-import com.usb.labchecker.model.dto.GithubUserDto;
 import com.usb.labchecker.model.dto.StudentByTelegramIdDto;
 import com.usb.labchecker.model.dto.StudentDto;
 import com.usb.labchecker.model.entity.Lab;
@@ -11,13 +10,11 @@ import com.usb.labchecker.model.repository.LabResultRepository;
 import com.usb.labchecker.model.repository.StudentRepository;
 import com.usb.labchecker.model.repository.VariantRepository;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -56,7 +53,7 @@ public class StudentService {
                 .githubLink(studentDto.getGithubLink())
                 .githubId(studentDto.getGithubId())
                 .group(groupService.getByName(studentDto.getGroupName()))
-                .telegramId(studentDto.getTelegramId())
+                .chatId(studentDto.getChatId())
                 .build();
 
         studentRepository.save(student);
@@ -67,13 +64,13 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Student getStudentByTelegramId(int telegramId) {
-        return studentRepository.getByTelegramId(telegramId).orElseThrow(NoSuchElementException::new);
+    public Student getStudentByChatId(int chatId) {
+        return studentRepository.getByChatId(chatId).orElseThrow(NoSuchElementException::new);
     }
 
-    public StudentByTelegramIdDto getStudentIdByTelegramId(Integer telegramId) {
+    public StudentByTelegramIdDto getStudentIdByChatId(Integer chatId) {
         return StudentByTelegramIdDto.builder()
-                .studentId(studentRepository.getByTelegramId(telegramId)
+                .studentId(studentRepository.getByChatId(chatId)
                 .orElseThrow(NoSuchElementException::new).getId())
                 .build();
     }

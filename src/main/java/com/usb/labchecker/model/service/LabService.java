@@ -50,21 +50,20 @@ public class LabService {
     }
 
     public List<LabByIdDto> getAllLabsForTelegramId(int telegramId) {
-        Group group = studentService.getStudentByTelegramId(telegramId).getGroup();
+        Group group = studentService.getStudentByChatId(telegramId).getGroup();
         List<Course> courseList = new ArrayList<>(courseService.getAllCoursesForGroupId(group));
         return labRepository.findAllByCourseIsIn(courseList).stream()
                 .map(e -> LabByIdDto.builder()
                         .id(e.getId())
                         .description(e.getLabTheme())
                         .subjectId(e.getCourse().getSubject().getId())
-//                        .docs(e.getDocs())
                         .number(e.getLabNumber())
                 .build())
                 .collect(Collectors.toList());
     }
 
     public List<LabByStudentIdDto> getLabListByStudentId(Integer studentId) {
-        List<LabByIdDto> results = getAllLabsForTelegramId(studentService.getOne(studentId).getTelegramId());
+        List<LabByIdDto> results = getAllLabsForTelegramId(studentService.getOne(studentId).getChatId());
         return results.stream()
                 .map(labByIdDto -> LabByStudentIdDto.builder().id(labByIdDto.getId())
                 .description(labByIdDto.getDescription())
@@ -72,20 +71,6 @@ public class LabService {
                 .subjectId(labByIdDto.getSubjectId())
                 .build())
                 .collect(Collectors.toList());
-//
-//        List<LabByStudentIdDto> resultList = new ArrayList<>();
-//        labResultRepository.findAllByStudent(studentService.getOne(studentId))
-//                .forEach(e -> resultList.add(LabByStudentIdDto.builder()
-//                        .description(e.getLab().getLabTheme())
-//                        .id(e.getId())
-//                        .number(e.getLab().getLabNumber())
-//                        .subjectId(e.getLab()
-//                                .getCourse()
-//                                .getSubject()
-//                                .getId())
-////                            .docs(e.getDocs())
-//                        .build()));
-//        return resultList;
     }
 
     public List<LabByStudentIdDto> getLabListByStudentIdAndSubjectId(Integer studentId, Integer subjectId) {
@@ -105,7 +90,6 @@ public class LabService {
                             .id(e.getId())
                             .number(e.getLabNumber())
                             .subjectId(subjectId)
-//                            .docs(e.getDocs())
                             .build())
                 .collect(Collectors.toList());
 

@@ -38,7 +38,7 @@ public class Student {
     @Column(name = "github_id")
     private String githubId;
 
-    @Column(name = "telegram_id")
-    private Integer telegramId;
+    @Column(name = "chat_id")
+    private Integer chatId;
 
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 public class StudentDto {
     private String firstName;
     private String lastName;
-    private Integer telegramId;
+    private Integer chatId;
     private String groupName;
     private String githubLink;
     private String githubId;
