@@ -32,4 +32,7 @@ public class Lab {
 
     @Column(name = "repo_name")
     private String repoName;
+
+    @Column(name = "test_repo_name")
+    private String testRepoName;
 }

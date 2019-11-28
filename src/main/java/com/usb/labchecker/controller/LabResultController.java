@@ -2,6 +2,7 @@ package com.usb.labchecker.controller;
 
 import com.usb.labchecker.model.dto.LabResultByStudentIdDto;
 import com.usb.labchecker.model.dto.LabResultDto;
+import com.usb.labchecker.model.dto.LabResultTestingServerDto;
 import com.usb.labchecker.model.entity.LabResult;
 import com.usb.labchecker.model.service.LabResultService;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class LabResultController {
     }
 
     @PostMapping
-    public LabResult addLabResult(@RequestBody LabResultDto labResultDto){
+    public LabResult addLabResult(@RequestBody LabResultTestingServerDto labResultDto){
         return labResultService.addLabResult(labResultDto);
     }
 

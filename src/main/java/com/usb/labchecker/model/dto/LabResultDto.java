@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LabResultDto {
-
     private Lab lab;
     private Student student;
     private Variant variant;

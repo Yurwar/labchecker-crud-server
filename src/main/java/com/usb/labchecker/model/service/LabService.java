@@ -102,4 +102,11 @@ public class LabService {
                 .getMaxMark();
     }
 
+    public String getTestRepoNameByLab(String repoName) {
+        return labRepository
+                .findByRepoName(repoName)
+                .orElseThrow(NoSuchElementException::new)
+                .getTestRepoName();
+    }
+
 }
