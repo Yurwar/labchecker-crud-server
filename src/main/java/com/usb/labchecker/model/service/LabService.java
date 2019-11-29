@@ -86,7 +86,7 @@ public class LabService {
 
     public List<LabByStudentIdDto> getLabListByStudentIdAndSubjectId(Integer studentId, Integer subjectId) {
         Group group = studentService.getOne(studentId).getGroup();
-        Subject subject = subjectRepository.getOne(studentId);
+        Subject subject = subjectRepository.getOne(subjectId);
         Course course = courseRepository.getByGroupAndSubject(group, subject);
 
         List<Lab> labs = labRepository.findAllByCourse(course);
