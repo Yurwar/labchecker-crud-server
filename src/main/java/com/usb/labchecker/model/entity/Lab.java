@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "labs")
 @Entity
@@ -37,4 +38,7 @@ public class Lab {
 
     @Column(name = "test_repo_name")
     private String testRepoName;
+
+    @OneToMany
+    private List<Document> documents;
 }

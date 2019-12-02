@@ -58,6 +58,7 @@ public class LabService {
                         .description(e.getLabTheme())
                         .subjectId(e.getCourse().getSubject().getId())
                         .number(e.getLabNumber())
+                        .docs(e.getDocuments())
                         .maxMark(e.getMaxMark())
                 .build())
                 .collect(Collectors.toList());
@@ -80,6 +81,7 @@ public class LabService {
                             .number(labByIdDto.getNumber())
                             .variant(variant)
                             .subjectId(labByIdDto.getSubjectId())
+                            .docs(labByIdDto.getDocs())
                             .maxMark(labByIdDto.getMaxMark())
                             .build();
                 })
@@ -106,6 +108,7 @@ public class LabService {
                             .number(lab.getLabNumber())
                             .variant(variant)
                             .subjectId(lab.getCourse().getSubject().getId())
+                            .docs(lab.getDocuments())
                             .maxMark(lab.getMaxMark())
                             .build();
 
