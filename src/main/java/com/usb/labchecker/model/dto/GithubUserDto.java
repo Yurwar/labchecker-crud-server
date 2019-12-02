@@ -1,12 +1,14 @@
 package com.usb.labchecker.model.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class GithubUserDto {
 
     private String login;
