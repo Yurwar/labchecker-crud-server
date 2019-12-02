@@ -3,10 +3,7 @@ package com.usb.labchecker.model.entity;
 import lombok.Data;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "teachers")
 @Entity
@@ -15,6 +12,8 @@ import javax.persistence.Table;
 public class Teacher {
 
     @Id
+    @SequenceGenerator(name = "teacherIdSeq", sequenceName = "teacher_id_seq", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "teacherIdSeq")
     @Column(name = "id")
     private Integer id;
 

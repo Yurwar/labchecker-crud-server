@@ -80,6 +80,6 @@ public class StudentService {
         Optional<Lab> lab = labRepository.findByRepoName(labRepoName);
         List<Variant> variants = variantRepository.findAllByLab(lab.orElseThrow(NoSuchElementException::new));
 
-        return student.orElseThrow(NoSuchElementException::new).getId() % variants.size();
+        return (student.orElseThrow(NoSuchElementException::new).getId() % variants.size()) + 1;
     }
 }

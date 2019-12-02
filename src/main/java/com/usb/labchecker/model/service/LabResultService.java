@@ -10,6 +10,8 @@ import com.usb.labchecker.model.entity.Variant;
 import com.usb.labchecker.model.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -105,6 +107,7 @@ public class LabResultService {
                 .mark((double) labResultDto.getMark())
                 .student(student)
                 .variant(variant)
+                .localDateTime(LocalDateTime.now(ZoneId.of("Europe/Kiev")))
                 .build();
 
         labResultRepository.save(labResultToAdd);

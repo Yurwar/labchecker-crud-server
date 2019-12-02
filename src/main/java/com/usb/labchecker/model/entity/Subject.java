@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "subjects")
 @Entity
@@ -17,6 +14,8 @@ public class Subject {
 
     @Id
     @JsonIgnore
+    @SequenceGenerator(name = "subjectIdSeq", sequenceName = "subject_id_seq", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subjectIdSeq")
     @Column(name = "id")
     private Integer id;
 

@@ -14,6 +14,8 @@ public class Lab {
 
     @Id
     @JsonIgnore
+    @SequenceGenerator(name = "labIdSeq", sequenceName = "lab_id_seq", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "labIdSeq")
     @Column(name = "id")
     private Integer id;
 
