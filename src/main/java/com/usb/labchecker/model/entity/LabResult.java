@@ -42,5 +42,5 @@ public class LabResult {
     private Double mark;
 
     @Column(name = "check_date_time")
-    private LocalDateTime localDateTime;
+    private LocalDateTime checkDateTime;
 }

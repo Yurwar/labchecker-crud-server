@@ -14,4 +14,5 @@ public class LabByStudentIdDto {
     private String description;
     private List<DocsDto> docs;
     private Integer variant;
+    private Integer maxMark;
 }

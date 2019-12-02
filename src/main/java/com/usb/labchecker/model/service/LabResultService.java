@@ -54,15 +54,16 @@ public class LabResultService {
         return labResultRepository
                 .findAllByStudent(studentRepository.getOne(studentId))
                 .stream()
-                .map(e-> LabResultByStudentIdDto.builder()
-                            .id(e.getId())
-                            .labId(e.getLab().getId())
-                            .result(e.getMark())
-                            .subjectId(e.getLab()
-                                    .getCourse()
-                                    .getSubject()
-                                    .getId())
-                            .build())
+                .map(e -> LabResultByStudentIdDto.builder()
+                        .id(e.getId())
+                        .labId(e.getLab().getId())
+                        .result(e.getMark())
+                        .subjectId(e.getLab()
+                                .getCourse()
+                                .getSubject()
+                                .getId())
+                        .checkDateTime(e.getCheckDateTime())
+                        .build())
                 .collect(Collectors.toSet());
     }
 
@@ -72,15 +73,15 @@ public class LabResultService {
                 .findAllByStudent(studentRepository.getOne(studentId));
         List<LabResult> labResultListBySubject = labResultRepository
                 .findAllByLabIn(labRepository
-                .findAllByCourseIsIn(courseRepository
-                .findAllBySubject(subjectRepository
-                .findById(subjectId)
-                .orElseThrow(NoSuchElementException::new))));
+                        .findAllByCourseIsIn(courseRepository
+                                .findAllBySubject(subjectRepository
+                                        .findById(subjectId)
+                                        .orElseThrow(NoSuchElementException::new))));
 
         return labResultListByStudent.stream()
                 .distinct()
                 .filter(labResultListBySubject::contains)
-                .map(e-> LabResultByStudentIdDto.builder()
+                .map(e -> LabResultByStudentIdDto.builder()
                         .id(e.getId())
                         .labId(e.getLab().getId())
                         .result(e.getMark())
@@ -88,6 +89,7 @@ public class LabResultService {
                                 .findById(subjectId)
                                 .orElseThrow(NoSuchElementException::new)
                                 .getId())
+                        .checkDateTime(e.getCheckDateTime())
                         .build())
                 .collect(Collectors.toSet());
 
@@ -107,7 +109,7 @@ public class LabResultService {
                 .mark((double) labResultDto.getMark())
                 .student(student)
                 .variant(variant)
-                .localDateTime(LocalDateTime.now(ZoneId.of("Europe/Kiev")))
+                .checkDateTime(LocalDateTime.now(ZoneId.of("Europe/Kiev")))
                 .build();
 
         labResultRepository.save(labResultToAdd);
