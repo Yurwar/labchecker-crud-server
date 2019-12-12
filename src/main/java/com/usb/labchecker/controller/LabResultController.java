@@ -29,10 +29,14 @@ public class LabResultController {
     public LabResult addLabResult(@RequestBody LabResultTestingServerDto labResultDto){
         botNotificationService.notifyAboutFinishOfBuild(labResultDto);
         LabResult labResult = labResultService.addLabResult(labResultDto);
-        spreadSheetService.putLabResult(labResult);
-
+        spreadSheetService.postLabResult(labResult);
         return labResult;
     }
+
+//    @PutMapping
+//    public LabResult updateLabResult(@RequestBody LabResultTestingServerDto labResultDto){
+//        spreadSheetService.putLabResult(labResult);
+//    }
 
     @GetMapping
     public Iterable<LabResultByStudentIdDto> getLabResultsByStudentId(@RequestParam(name = "studentId") Integer studentId) {

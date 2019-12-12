@@ -14,5 +14,6 @@ import java.util.Optional;
 public interface LabResultRepository extends CrudRepository<LabResult, Integer> {
     List<LabResult> findAllByStudent(Student student);
     List<LabResult> findAllByLabIn(List<Lab> labList);
+    List<LabResult> findAllByStudentAndLab(Student student, Lab lab);
     Optional<LabResult> findByLabAndStudentAndVariant(Lab lab, Student student, Variant variant);
 }
