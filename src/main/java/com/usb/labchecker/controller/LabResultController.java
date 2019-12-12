@@ -1,11 +1,11 @@
 package com.usb.labchecker.controller;
 
 import com.usb.labchecker.model.dto.LabResultByStudentIdDto;
-import com.usb.labchecker.model.dto.LabResultDto;
 import com.usb.labchecker.model.dto.LabResultTestingServerDto;
 import com.usb.labchecker.model.entity.LabResult;
 import com.usb.labchecker.model.service.BotNotificationService;
 import com.usb.labchecker.model.service.LabResultService;
+import com.usb.labchecker.model.service.SpreadSheetService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -15,17 +15,23 @@ import java.util.Set;
 public class LabResultController {
     private final LabResultService labResultService;
     private final BotNotificationService botNotificationService;
+    private final SpreadSheetService spreadSheetService;
 
     public LabResultController(LabResultService labResultService,
-                               BotNotificationService botNotificationService) {
+                               BotNotificationService botNotificationService,
+                               SpreadSheetService spreadSheetService) {
         this.labResultService = labResultService;
         this.botNotificationService = botNotificationService;
+        this.spreadSheetService = spreadSheetService;
     }
 
     @PostMapping
     public LabResult addLabResult(@RequestBody LabResultTestingServerDto labResultDto){
         botNotificationService.notifyAboutFinishOfBuild(labResultDto);
-        return labResultService.addLabResult(labResultDto);
+        LabResult labResult = labResultService.addLabResult(labResultDto);
+        spreadSheetService.putLabResult(labResult);
+
+        return labResult;
     }
 
     @GetMapping

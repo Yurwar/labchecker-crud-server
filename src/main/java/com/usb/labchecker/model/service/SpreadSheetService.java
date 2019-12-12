@@ -1,59 +1,69 @@
 package com.usb.labchecker.model.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usb.labchecker.model.dto.LabResultDto;
 import com.usb.labchecker.model.dto.LabResultSpreadSheetDto;
 import com.usb.labchecker.model.dto.StudentDto;
-import org.json.JSONObject;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import com.usb.labchecker.model.entity.LabResult;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
 @Service
-public class    SpreadSheetService {
+public class SpreadSheetService {
 
-    private final String spreadSheetAPIUrl = "https://teacherlabchecker.azurewebsites.net";
-    private RestTemplate restTemplate;
+    private static final String API_LAB = "/api/lab/";
+    private static final String API_STUDENT = "/api/student";
+    private final String SPREAD_SHEET_API_URL = "https://teacherlabchecker.azurewebsites.net";
 
-    public SpreadSheetService(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
-    }
-
-    public void putLabResult(LabResultDto labResultDto) {
+    public void putLabResult(LabResult labResult) {
 
         LabResultSpreadSheetDto labResultSpreadSheetDto =
-                new LabResultSpreadSheetDto(labResultDto);
+                LabResultSpreadSheetDto.builder()
+                        .labNumber(labResult.getLab().getLabNumber())
+                        .studentName(labResult.getStudent().getFirstName() +
+                                " " + labResult.getStudent().getLastName())
+                        .subjectName(labResult.getLab().getCourse().getSubject().getName())
+                        .result(labResult.getMark())
+                .build();
+
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setSSLHostnameVerifier(new NoopHostnameVerifier())
+                .build();
+
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        requestFactory.setHttpClient(httpClient);
+
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        String resourceUrl = spreadSheetAPIUrl + "/api/lab/" +
-                labResultDto.getLab().getId();
         HttpEntity<LabResultSpreadSheetDto> requestUpdate =
                 new HttpEntity<>(labResultSpreadSheetDto, headers);
+        String resourceUrl = SPREAD_SHEET_API_URL + API_LAB +
+                labResult.getLab().getId();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         restTemplate.exchange(resourceUrl, HttpMethod.PUT, requestUpdate, Void.class);
     }
 
     public void postStudent(StudentDto studentDto){
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        JSONObject studentDtoJSONObject = new JSONObject();
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setSSLHostnameVerifier(new NoopHostnameVerifier())
+                .build();
 
-        studentDtoJSONObject.put("firstName", studentDto.getFirstName());
-        studentDtoJSONObject.put("lastName", studentDto.getLastName());
-        studentDtoJSONObject.put("telegramId", studentDto.getChatId());
-        studentDtoJSONObject.put("groupName", studentDto.getGroupName());
-        studentDtoJSONObject.put("githubId", studentDto.getGithubId());
-        studentDtoJSONObject.put("githubLink", studentDto.getGithubLink());
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        requestFactory.setHttpClient(httpClient);
 
-        HttpEntity<String> request = new HttpEntity<String>(studentDtoJSONObject.toString(), headers);
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
 
-        restTemplate.postForObject(spreadSheetAPIUrl + "/api/student", request, String.class);
+        restTemplate.postForLocation(SPREAD_SHEET_API_URL + API_STUDENT, studentDto);
+
     }
 }
