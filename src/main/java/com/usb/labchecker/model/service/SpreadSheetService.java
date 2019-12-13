@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class SpreadSheetService {
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         try {
-            restTemplate.postForLocation(SPREAD_SHEET_API_URL + API_LAB, labResultSpreadSheetDto);
+            URI uri = restTemplate.postForLocation(SPREAD_SHEET_API_URL + API_LAB, labResultSpreadSheetDto);
         }
         catch (HttpServerErrorException errorException){
         }
@@ -81,7 +82,7 @@ public class SpreadSheetService {
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         try {
-            restTemplate.postForLocation(SPREAD_SHEET_API_URL + API_STUDENT, studentDto);
+            URI uri = restTemplate.postForLocation(SPREAD_SHEET_API_URL + API_STUDENT, studentDto);
         }
         catch (HttpServerErrorException errorException){
         }
