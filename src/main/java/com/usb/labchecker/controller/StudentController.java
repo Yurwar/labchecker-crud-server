@@ -3,6 +3,7 @@ package com.usb.labchecker.controller;
 import com.usb.labchecker.model.dto.StudentByTelegramIdDto;
 import com.usb.labchecker.model.dto.StudentDto;
 import com.usb.labchecker.model.entity.Student;
+import com.usb.labchecker.model.service.SpreadSheetService;
 import com.usb.labchecker.model.service.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,12 @@ import java.net.URI;
 @RequestMapping("/api/v1/students")
 public class StudentController {
     private final StudentService studentService;
+    private final SpreadSheetService spreadSheetService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService,
+                             SpreadSheetService spreadSheetService) {
         this.studentService = studentService;
+        this.spreadSheetService = spreadSheetService;
     }
 
     @PostMapping
@@ -27,12 +31,13 @@ public class StudentController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newStudent.getId()).toUri();
 
+        spreadSheetService.postStudent(studentDto);
         return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/telegramId/{id}")
-    public StudentByTelegramIdDto getStudentIdByTelegramId(@PathVariable("id") Integer telegramId){
-        return studentService.getStudentIdByTelegramId(telegramId);
+    public StudentByTelegramIdDto getStudentIdByChatId(@PathVariable("id") Integer chatId){
+        return studentService.getStudentIdByChatId(chatId);
     }
 
     @GetMapping("/{githubId}/variant")

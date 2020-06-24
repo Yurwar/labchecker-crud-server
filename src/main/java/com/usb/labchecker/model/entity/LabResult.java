@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Table(name = "lab_results")
 @Entity
@@ -16,6 +18,8 @@ public class LabResult {
 
     @Id
     @JsonIgnore
+    @SequenceGenerator(name = "labResultIdSeq", sequenceName = "lab_result_id_seq", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "labResultIdSeq")
     @Column(name = "id")
     private Integer id;
 
@@ -37,4 +41,6 @@ public class LabResult {
     @Column(name = "mark")
     private Double mark;
 
+    @Column(name = "check_date_time")
+    private LocalDateTime checkDateTime;
 }

@@ -43,4 +43,9 @@ public class LabController {
         return labService.getMaxMarkByLabRepoName(repoName);
     }
 
+    @GetMapping("/{repoName}/test-repo")
+    public String getTestRepoNameByLab(@PathVariable("repoName") String repoName) {
+        return labService.getTestRepoNameByLab(repoName);
+    }
+
 }

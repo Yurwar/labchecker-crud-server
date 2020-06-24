@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "labs")
 @Entity
@@ -14,6 +15,8 @@ public class Lab {
 
     @Id
     @JsonIgnore
+    @SequenceGenerator(name = "labIdSeq", sequenceName = "lab_id_seq", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "labIdSeq")
     @Column(name = "id")
     private Integer id;
 
@@ -32,4 +35,10 @@ public class Lab {
 
     @Column(name = "repo_name")
     private String repoName;
+
+    @Column(name = "test_repo_name")
+    private String testRepoName;
+
+    @OneToMany
+    private List<Document> documents;
 }

@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface LabRepository extends CrudRepository<Lab, Integer> {
     List<Lab> findAllByCourseIsIn(List<Course> courseList);
     Optional<Lab> findByRepoName(String repoName);
+    List<Lab> findAllByCourse(Course course);
 }

@@ -9,7 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DocsDto {
-    String name;
-    String link;
+public class LabResultSpreadSheetDto {
+
+    private String subjectName;
+    private String studentName;
+    private String groupName;
+    private Integer labNumber;
+    private Double result;
+
 }

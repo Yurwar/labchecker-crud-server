@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class SubjectDto {
-    private String name;
+@Data
+public class BotBuildStartNotificationDto {
+    private int studentId;
+    private int subjectId;
+    private int labId;
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SubjectDto {
-    private String name;
+public class TestRunnerBuildStartNotificationDto {
+    private String repoName;
+    private long githubId;
 }

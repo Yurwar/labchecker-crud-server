@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class LabResultByStudentIdDto {
-
-    private Integer id;
-    private Integer subjectId;
-    private Integer labId;
-    private Double result;
-    private LocalDateTime checkDateTime;
-
+public class LabResultTestingServerDto {
+    String studentGithubLogin;
+    long studentGithubID;
+    int variant;
+    int mark;
+    String repositoryName;
+    String language;
+    LocalDateTime updatedDate;
 }

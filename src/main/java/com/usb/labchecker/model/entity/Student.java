@@ -18,7 +18,8 @@ public class Student {
 
     @Id
     @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "studentIdSeq", sequenceName = "student_id_seq", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "studentIdSeq")
     @Column(name = "id")
     private Integer id;
 
@@ -38,7 +39,7 @@ public class Student {
     @Column(name = "github_id")
     private String githubId;
 
-    @Column(name = "telegram_id")
-    private Integer telegramId;
+    @Column(name = "chat_id")
+    private Integer chatId;
 
 }

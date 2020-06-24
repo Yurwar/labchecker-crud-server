@@ -12,4 +12,5 @@ import java.util.List;
 public interface CourseRepository extends CrudRepository<Course, Integer> {
     List<Course> getAllByGroup(Group group);
     List<Course> findAllBySubject(Subject subject);
+    Course getByGroupAndSubject(Group group, Subject subject);
 }
